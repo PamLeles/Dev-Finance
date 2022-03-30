@@ -1,7 +1,13 @@
 /*Global*/
 :root{
+    /*mode ligth*/
    --dark-blue:#363f5f; 
-
+   --cor-gelo:#f0f2f5;
+   --verde-musgo:#2d4a22;
+   --white:#fff;
+   --verde-limão:#49aa26;
+   --cinza:#969cb3;
+   --red:#e92929;
 
 }
 *{
@@ -10,11 +16,23 @@
     box-sizing:border-box;
 }
 body{
-    background: #f0f2f5;
+    background: var(--cor-gelo);
     font-family: 'Poppins', sans-serif;
 }
+.sr-only{
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border-width: 0;
+
+}
 .container{
-    width: min(90vw, 800px);
+    
     margin: auto;
 }
 /*title*/
@@ -26,12 +44,12 @@ h2{
 }
 /*header*/
 header{
-    background: #2d4a22;
+    background: var(--verde-musgo);
     padding: 2rem 0 10rem; 
     text-align: center;
 }
 #logo{
-    color:#fff;
+    color:var(--white);
     font-weight: 100;
 }
 /*balance*/
@@ -39,11 +57,11 @@ header{
     margin-top: -8rem;
 }
 #balance h2{
-    color:#fff;   
+    color:var(--white);   
 }
 /*cards*/
 .card{
-    background: white;
+    background: var(--white);
     padding: 1.5rem 2rem;
     border-radius: 0.25rem;
     margin-bottom: 2rem;
@@ -64,14 +82,14 @@ header{
 
 }
 .card.total{
-    background: #49aa26;
-    color: white;
+    background: var(--verde-limão);
+    color: var(--white);
 }
 /*table*/
 #data-table{
     width: 100%;
     border-spacing: 0 0.5rem ;
-    color:#969cb3;
+    color:var(--cinza);
 }
 
 table thead tr th:first-child, 
@@ -80,7 +98,7 @@ table thead tr td:first-child{
   
 }
 table th{
-    background: white;
+    background: var(--white);
     font-weight: normal;
     padding: 1rem 2rem;
     text-align: left;
@@ -94,7 +112,7 @@ table tbody tr:hover{
 }
 
 table td{
-    background: white;
+    background: var(--white);
     padding: 1rem 2rem;
     font-weight: normal;
 }
@@ -103,11 +121,11 @@ td.description{
     color: var(--dark-blue);
 }
 td.income{
-    color:#12a454;
+    color:var(--verde-limão);
 
 }
 td.expense{
-    color: #e92929;
+    color: var(--red);
 
 
 }
@@ -119,4 +137,5 @@ footer{
     color: var(--dark-blue);
     opacity: 0.6;
 }
+
 
