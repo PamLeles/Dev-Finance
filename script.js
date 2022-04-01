@@ -17,25 +17,25 @@ const Modal = {
 }
 const transactions = [
     {
-        id: 1,
+        
         description: 'luz',
         amount: -50000,
         date: '29/03/2022'
     },
     {
-        id: 2,
+        
         description: 'Criação Website',
         amount: 500000,
         date: '29/03/2022'
     },
     {
-        id: 3,
+        
         description: 'internet',
         amount: -20000,
         date: '29/03/2022'
     },
     {
-        id: 3,
+        
         description: 'app',
         amount: 200000,
         date: '29/03/2022'
@@ -48,6 +48,13 @@ const Transaction = { //const responsavel por fazer o cálculo!
         Transaction.all.push(transaction)//colocar dentro do array 
         App.reload()
     },
+
+    remove(index){
+        Transaction.all.splice(index,1)//posição do array
+        App.reload()
+
+    },
+
     incomes() {
         let income = 0;
         // pegar todas transações
@@ -67,6 +74,7 @@ const Transaction = { //const responsavel por fazer o cálculo!
         return income;
 
     },
+
     expenses() {
         let expense = 0;
         Transaction.all.forEach(transaction => {
@@ -80,6 +88,7 @@ const Transaction = { //const responsavel por fazer o cálculo!
         return expense;
 
     },
+
     total() {
         // entradas - saídas
         return Transaction.incomes() + Transaction.expenses();
@@ -164,11 +173,5 @@ const App = {
         App.init()
     },
 }
-App.init()
+App.init();
 
-Transaction.add({
-    id: 10,
-    description: 'alo',
-    amount: 220,
-    date: '10/10/10'
-})
