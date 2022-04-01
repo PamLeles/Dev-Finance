@@ -43,11 +43,16 @@ const transactions = [
 ]
 
 const Transaction = { //const responsavel por fazer o cálculo!
+    all: transactions, //refaturação no código
+    add(transaction) {
+        Transaction.all.push(transaction)//colocar dentro do array 
+        App.reload()
+    },
     incomes() {
         let income = 0;
         // pegar todas transações
         //para cada transação 
-        transactions.forEach(transaction => {
+        Transaction.all.forEach(transaction => {
             //se maior que 0 
             if (transaction.amount > 0) {
                 // somar a uma variavel
@@ -64,7 +69,7 @@ const Transaction = { //const responsavel por fazer o cálculo!
     },
     expenses() {
         let expense = 0;
-        transactions.forEach(transaction => {
+        Transaction.all.forEach(transaction => {
             //se menor que 0 
             if (transaction.amount < 0) {
                 expense += transaction.amount;
@@ -119,9 +124,13 @@ const DOM = {
         document
             .getElementById('totalDisplay')
             .innerHTML = Utils.formatCurrency(Transaction.total())
-        
 
+
+    },
+    clearTransactions(){
+        DOM.transactionsContainer.innerHTML = ""
     }
+
 }
 
 const Utils = {
@@ -139,8 +148,27 @@ const Utils = {
     }
 }
 
-transactions.forEach((transaction) => {
-    DOM.addTransaction(transaction);
-});
+const App = {
+    init() {
+        Transaction.all.forEach(transaction => {
+            DOM.addTransaction(transaction);
+        });
 
-DOM.updateBalance()
+        DOM.updateBalance();
+
+
+
+    },
+    reload() {
+        DOM.clearTransactions()
+        App.init()
+    },
+}
+App.init()
+
+Transaction.add({
+    id: 10,
+    description: 'alo',
+    amount: 220,
+    date: '10/10/10'
+})
