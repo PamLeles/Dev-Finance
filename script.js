@@ -61,11 +61,16 @@ const DOM = {
         DOM.transactionsContainer.appendChild(tr);
     },
     innerHTMLTransaction(transaction) {
-        const CSSClass = transaction.amount >= 0 ? "income" : "expense";
+        const CSSClass = transaction.amount > 0 ? "income" : "expense";
+
+        const amount = Utils.formatCurrency(transaction.amount)
+        //>trocar transaction.amount para amount - dessa forma ele irá tranformar
+        // o valor que antes eram apenas números, para a moeda/real. 
         
+
         const html = `
             <td class="description">${transaction.description}</td>
-            <td class="${CSSClass}">${transaction.amount}</td>
+            <td class="${CSSClass}">${amount}</td>
             <td class="date">${transaction.date}</td>
             <td>
                 <img src="./assets/minus.svg" alt="Remover Transação">
@@ -73,6 +78,21 @@ const DOM = {
         `;
 
         return html;
+    }
+}
+
+const Utils = {
+    formatCurrency(value){
+        const signal = Number(value) < 0 ? "-": ""
+        value = String(value).replace(/\D/g,"")
+        value = Number(value) / 100
+        // abaixo iremos transformar o número em moeda
+        value = value.toLocaleString("pt-BR",{
+            style: "currency", //estilo moeda
+            currency: "BRL" //transformando a moeda em real br;
+        }) 
+
+        return signal + value 
     }
 }
 
