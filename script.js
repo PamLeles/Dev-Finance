@@ -42,15 +42,43 @@ const transactions = [
     }
 ]
 
-const Transaction = {
+const Transaction = { //const responsavel por fazer o cálculo!
     incomes() {
-        // somar entradas
+        let income = 0;
+        // pegar todas transações
+        //para cada transação 
+        transactions.forEach(transaction => {
+            //se maior que 0 
+            if (transaction.amount > 0) {
+                // somar a uma variavel
+                income += transaction.amount;
+                // mesma coisa que income = income + transaction.amount;
+                // ou seja income = 0, transaction. amount =  valor das transações.
+            }
+
+        })
+
+        //retornar a variavel
+        return income;
+
     },
     expenses() {
-        // somar saídas
+        let expense = 0;
+        transactions.forEach(transaction => {
+            //se menor que 0 
+            if (transaction.amount < 0) {
+                expense += transaction.amount;
+            }
+
+        })
+
+        return expense;
+
     },
     total() {
         // entradas - saídas
+        return Transaction.incomes() + Transaction.expenses();
+
     }
 }
 const DOM = {
@@ -66,7 +94,7 @@ const DOM = {
         const amount = Utils.formatCurrency(transaction.amount)
         //>trocar transaction.amount para amount - dessa forma ele irá tranformar
         // o valor que antes eram apenas números, para a moeda/real. 
-        
+
 
         const html = `
             <td class="description">${transaction.description}</td>
@@ -78,24 +106,41 @@ const DOM = {
         `;
 
         return html;
+    },
+    updateBalance() {
+        //mostar atualizando de valor nos cards
+        //chamar id
+        document
+            .getElementById('incomeDisplay')
+            .innerHTML = Utils.formatCurrency(Transaction.incomes())
+        document
+            .getElementById('expenseDisplay')
+            .innerHTML = Utils.formatCurrency(Transaction.expenses())
+        document
+            .getElementById('totalDisplay')
+            .innerHTML = Utils.formatCurrency(Transaction.total())
+        
+
     }
 }
 
 const Utils = {
-    formatCurrency(value){
-        const signal = Number(value) < 0 ? "-": ""
-        value = String(value).replace(/\D/g,"")
+    formatCurrency(value) {
+        const signal = Number(value) < 0 ? "-" : ""
+        value = String(value).replace(/\D/g, "")
         value = Number(value) / 100
         // abaixo iremos transformar o número em moeda
-        value = value.toLocaleString("pt-BR",{
+        value = value.toLocaleString("pt-BR", {
             style: "currency", //estilo moeda
             currency: "BRL" //transformando a moeda em real br;
-        }) 
+        })
 
-        return signal + value 
+        return signal + value //retorna o dinheiro posito ou negativo;
     }
 }
 
 transactions.forEach((transaction) => {
     DOM.addTransaction(transaction);
 });
+
+DOM.updateBalance()
