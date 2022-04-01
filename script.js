@@ -17,25 +17,25 @@ const Modal = {
 }
 const transactions = [
     {
-        
+
         description: 'luz',
         amount: -50000,
         date: '29/03/2022'
     },
     {
-        
+
         description: 'Criação Website',
         amount: 500000,
         date: '29/03/2022'
     },
     {
-        
+
         description: 'internet',
         amount: -20000,
         date: '29/03/2022'
     },
     {
-        
+
         description: 'app',
         amount: 200000,
         date: '29/03/2022'
@@ -49,8 +49,8 @@ const Transaction = { //const responsavel por fazer o cálculo!
         App.reload()
     },
 
-    remove(index){
-        Transaction.all.splice(index,1)//posição do array
+    remove(index) {
+        Transaction.all.splice(index, 1)//posição do array
         App.reload()
 
     },
@@ -136,13 +136,23 @@ const DOM = {
 
 
     },
-    clearTransactions(){
+    clearTransactions() {
         DOM.transactionsContainer.innerHTML = ""
     }
 
 }
 
 const Utils = {
+    formatAmount(value) { //transforma o value em número e depois multipla po 100.
+        value = Number(value) * 100
+        return value;
+    },
+
+    formatDate(date) {
+        const splittedDate = date.split("-")
+        return `${splittedDate[2]}/ ${splittedDate[1]}/${splittedDate[0]}`
+    },
+
     formatCurrency(value) {
         const signal = Number(value) < 0 ? "-" : ""
         value = String(value).replace(/\D/g, "")
@@ -154,6 +164,80 @@ const Utils = {
         })
 
         return signal + value //retorna o dinheiro posito ou negativo;
+    }
+}
+
+const Form = {
+    //propridade
+    description: document.querySelector('input#description'),
+    amount: document.querySelector('input#amount'),
+    date: document.querySelector('input#date'),
+
+    //obj com os valorer
+    getValues() {
+        return {
+            description: Form.description.value,
+            amount: Form.amount.value,
+            date: Form.date.value
+        }
+    },
+
+    //formatar dados
+    // formatData(){
+    // console.log('Formatar os dados')
+    // },
+
+    //verificar os campos
+    validateFields() {
+        const { description, amount, date } = Form.getValues();
+        if (description.trim() === "" ||
+            amount.trim() === "" ||
+            date.trim() === "") {
+            throw new Error("Por favor, preencha todos os campos!")
+        }
+    },
+
+    formatValues() {
+        let { description, amount, date } = Form.getValues();
+        amount = Utils.formatAmount(amount);
+        date = Utils.formatDate(date);
+        return {
+            description,
+            amount,
+            date
+        }
+    },
+    clearFields() {
+        Form.description.value = ""
+        Form.amount.value = ""
+        Form.date.value = ""
+    },
+
+
+    //formulario
+    submit(event) {
+        event.preventDefault();
+
+        try {
+            //verificar se todas as informações foram preenchidas
+            Form.validateFields();
+
+            // formatar os dados para salvar
+            const transaction = Form.formatValues();
+
+            //salvar
+            Transaction.add(transaction);
+
+            //apagar os dados do formulario
+            Form.clearFields();
+
+            // fechar modal
+            Modal.close();
+
+        } catch (error) {
+            alert(error.message)
+
+        }
     }
 }
 
