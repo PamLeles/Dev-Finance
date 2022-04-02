@@ -15,44 +15,31 @@ const Modal = {
             .classList.remove('active')
     }
 }
-const transactions = [
-    {
 
-        description: 'luz',
-        amount: -50000,
-        date: '29/03/2022'
+const storage = {
+    get() {
+        //retornar a string devolta p/ o array
+        return JSON.parse(window.localStorage.getItem('dev.finances:transactions')) || []; //ou devolve o array vazio
     },
-    {
-
-        description: 'Criação Website',
-        amount: 500000,
-        date: '29/03/2022'
-    },
-    {
-
-        description: 'internet',
-        amount: -20000,
-        date: '29/03/2022'
-    },
-    {
-
-        description: 'app',
-        amount: 200000,
-        date: '29/03/2022'
+    set(transactions) {
+        localStorage
+            .setItem("dev.finances:transactions", JSON.stringify(transactions)) // para transformar o array "const transaction" em string usando o JSON.
     }
-]
+}
 
 const Transaction = { //const responsavel por fazer o cálculo!
-    all: transactions, //refaturação no código
+    all: storage.get(),
+
     add(transaction) {
-        Transaction.all.push(transaction)//colocar dentro do array 
-        App.reload()
+        Transaction.all.push(transaction);//colocar dentro do array
+        storage.set(Transaction.all);
+        App.reload();
     },
 
     remove(index) {
-        Transaction.all.splice(index, 1)//posição do array
-        App.reload()
-
+        Transaction.all.splice(index, 1);//posição do array
+        storage.set(Transaction.all);
+        App.reload();
     },
 
     incomes() {
@@ -99,10 +86,12 @@ const DOM = {
     transactionsContainer: document.querySelector('#data-table tbody'),
     addTransaction(transaction, index) {
         const tr = document.createElement('tr');
-        tr.innerHTML = DOM.innerHTMLTransaction(transaction);
+        tr.innerHTML = DOM.innerHTMLTransaction(transaction, index);
+        tr.dataset.index = index;
+
         DOM.transactionsContainer.appendChild(tr);
     },
-    innerHTMLTransaction(transaction) {
+    innerHTMLTransaction(transaction, index) {
         const CSSClass = transaction.amount > 0 ? "income" : "expense";
 
         const amount = Utils.formatCurrency(transaction.amount)
@@ -115,7 +104,7 @@ const DOM = {
             <td class="${CSSClass}">${amount}</td>
             <td class="date">${transaction.date}</td>
             <td>
-                <img src="./assets/minus.svg" alt="Remover Transação">
+                <img onclick="Transaction.remove(${index})" src="./assets/minus.svg" alt="Remover Transação">
             </td>
         `;
 
@@ -241,16 +230,12 @@ const Form = {
     }
 }
 
+
 const App = {
     init() {
-        Transaction.all.forEach(transaction => {
-            DOM.addTransaction(transaction);
-        });
+        Transaction.all.forEach(DOM.addTransaction);
 
         DOM.updateBalance();
-
-
-
     },
     reload() {
         DOM.clearTransactions()
