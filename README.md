@@ -36,7 +36,7 @@ O dev.finances é uma aplicação de controle financeiro, onde é possível cada
 
 ## 🔖 Layout
 
-Você pode visualizar o layout do projeto através [desse link](https://extraordinary-cactus-deb64d.netlify.app).
+Você pode visualizar o layout do projeto através [desse link](https://dev-finances-deb64d.netlify.app).
 
 
 ## 📰 Licença
